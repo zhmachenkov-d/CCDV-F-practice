@@ -39,7 +39,7 @@ In the order of the course.
 | Stream the reply as it is written | `stream.py` (start: `starting-points/d07_stream.start.py`) | `python stream.py` - `messages.stream`, text pieces as they arrive, `get_final_message()` for stop_reason and usage |
 | Your first tool call, end to end | `tool_call.py` | `python tool_call.py` - `tools=`, `stop_reason == "tool_use"`, run the function, send `tool_result` back |
 | Schema-valid output from Claude | `extract.py` | `python extract.py` - `output_config.format` with a JSON schema |
-| Validate, then retry with the error | `validate.py` (start: `starting-points/p08_validate.start.py`) | `python validate.py` - schema-valid is not business-valid; retry once with the exact error |
+| Validate, then retry with the error | `validate.py` (start: `starting-points/p08_validate.start.py`) | `python validate.py` - schema-valid is not business-valid; send the exact error back and retry, up to three attempts |
 | BUILD: ShopAssist extracts return requests | `build_extract.py`, `emails/` | `python build_extract.py` - five emails in, `return_requests.json` out |
 | Structured tool errors in code | `tool_errors.py` (start: `starting-points/p11_tool_errors.start.py`) | `python tool_errors.py` - tools return `isError`, `errorCategory`, `isRetryable`, `customerMessage`, `developerMessage` |
 | BUILD: backend tools and an MCP server | `mcp_server.py` | `claude mcp add shopassist -- python mcp_server.py`, then `claude -p "..." --allowedTools "mcp__shopassist__lookup_order,mcp__shopassist__start_return"` |
@@ -51,8 +51,8 @@ In the order of the course.
 | Claude Code hands-on: CLAUDE.md, rules and a skill | `CLAUDE.md`, `.claude/rules/tools.md`, `.claude/skills/order-check/SKILL.md` | `claude -p "Use the order-check skill for order ORD-87654321." --allowedTools "Skill,Bash(python *)"` |
 | Claude Code in CI: `-p` and JSON output | `ci_review.sh`, `review_schema.json` | break a tool convention in `mcp_server.py`, then `sh ci_review.sh` |
 | Errors and retries: 401, 400 and timeouts | `errors.py` | `python errors.py` - a wrong key, a removed parameter through `extra_body`, a 50 ms timeout; `max_retries` and `with_options` |
-| Prompt injection through a tool result | `injection.py` (start: `starting-points/d29_injection.start.py`) | `python injection.py` - an order note demands a 500 refund; then `python -c "from injection import process_refund; print(process_refund('ORD-12345678', 500))"` shows the code gate |
-| PII and secrets: redact before you send | `redact.py` (start: `starting-points/d30_redact.start.py`) | `python redact.py` - emails, card and phone numbers become placeholders before the request; `git check-ignore -v .env` |
+| Prompt injection through a tool result | `injection.py` | `python injection.py` - an order note demands a 500 refund; then `python -c "from injection import process_refund; print(process_refund('ORD-12345678', 500))"` shows the code gate |
+| PII and secrets: redact before you send | `redact.py` | `python redact.py` - emails, card and phone numbers become placeholders before the request; `git check-ignore -v .env` |
 | Claude Code hooks: block a destructive command | `.claude/settings.json`, `.claude/hooks/guard.py` | `claude -p "Show the first line of .env with head, then delete review.json with rm. Report what happened." --allowedTools Bash` - both commands are blocked by the hook |
 
 The order IDs the tools know are `ORD-12345678` (a jacket, delivered 20 days ago) and `ORD-87654321` (a lamp, delivered 45 days ago).
