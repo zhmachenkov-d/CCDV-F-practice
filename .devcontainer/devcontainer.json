@@ -1,0 +1,58 @@
+{
+    "name": "CCDV-F-practice Container",
+    "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+    "runArgs": [
+        "--env-file",
+        "${localWorkspaceFolder}/.env"
+    ],
+    // Features to add to the dev container. More info: https://containers.dev/features.
+    "features": {
+        "ghcr.io/devcontainers/features/python:1": {
+            "version": "latest",
+            "installTools": false
+        },
+        "ghcr.io/va-h/devcontainers-features/uv:1": {
+            "version": "latest"
+        },
+        "ghcr.io/devcontainers/features/node:1": {},
+        "ghcr.io/anthropics/devcontainer-features/claude-code:1.0": {}
+    },
+    // Configure tool-specific properties.
+    "customizations": {
+        "vscode": {
+            "extensions": [                
+                "ms-python.python",
+                "ms-python.vscode-pylance",
+                "ms-python.debugpy",
+                "charliermarsh.ruff"
+            ],
+            "settings": {
+                "files.autoSave": "onFocusChange",
+                "editor.minimap.enabled": false,
+                "githubPullRequests.defaultMergeMethod": "squash",
+                "githubPullRequests.assignCreated": "${user}",
+                "[python]": {
+                    "editor.formatOnSave": true,
+                    "editor.defaultFormatter": "charliermarsh.ruff",
+                    "editor.codeActionsOnSave": {
+                        "source.fixAll": "explicit",
+                        "source.organizeImports": "explicit"
+                    }
+                },
+                "python-envs.workspaceSearchPaths": ["./**/.venv"],
+                "notebook.formatOnSave.enabled": true,
+                "notebook.codeActionsOnSave": {
+                    "notebook.source.fixAll": "explicit",
+                    "notebook.source.organizeImports": "explicit"
+                }
+            }
+        }
+    },
+    // All DV5 siblings (dv5.docs plus the repos under projects/) are git submodules,
+    // initialized by postCreateCommand — none are bind-mounted from the host.
+    "mounts": [
+        "source=${localEnv:HOME}${localEnv:USERPROFILE}/.ssh,target=/home/vscode/.ssh,type=bind,consistency=cached,readonly=true"
+    ],
+    "shutdownAction": "stopContainer",
+    "remoteUser": "vscode"
+}
